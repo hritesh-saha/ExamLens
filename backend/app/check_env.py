@@ -1,5 +1,5 @@
 """
-check_env.py — Environment Verification Script
+check_env.py -- Environment Verification Script
 ===============================================
 Run this after completing Step 1 to confirm that:
   1. Python version is correct
@@ -16,15 +16,19 @@ Expected output: All checks pass (green OK messages).
 import sys
 import os
 
+# Force stdout to UTF-8 so the script works in all Windows terminals
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 # ── ANSI colours for clear pass/fail messages ──────────────────────────────
 GREEN = "\033[92m"
 RED   = "\033[91m"
 YELLOW = "\033[93m"
 RESET = "\033[0m"
 
-def ok(msg):   print(f"  {GREEN}✓  {msg}{RESET}")
-def fail(msg): print(f"  {RED}✗  {msg}{RESET}")
-def warn(msg): print(f"  {YELLOW}!  {msg}{RESET}")
+def ok(msg):   print(f"  {GREEN}[OK]  {msg}{RESET}")
+def fail(msg): print(f"  {RED}[FAIL] {msg}{RESET}")
+def warn(msg): print(f"  {YELLOW}[WARN] {msg}{RESET}")
 
 # ── 1. Python version ──────────────────────────────────────────────────────
 print("\n[1] Python Version")
