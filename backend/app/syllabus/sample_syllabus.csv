@@ -1,0 +1,11 @@
+topic_code,name,syllabus_unit
+DBMS-01,Database System Architecture and Concepts,Unit 1
+DBMS-02,Entity-Relationship (ER) Data Model,Unit 1
+DBMS-03,Relational Model & Relational Algebra,Unit 2
+DBMS-04,Structured Query Language (SQL) & Constraints,Unit 2
+DBMS-05,Functional Dependencies & Normalization (1NF 2NF 3NF BCNF),Unit 3
+DBMS-06,Transaction Management and ACID Properties,Unit 4
+DBMS-07,Concurrency Control Protocols & Serializability,Unit 4
+DBMS-08,Database Recovery Techniques and Logging,Unit 4
+DBMS-09,Indexing B-Trees and Hash Indexing,Unit 5
+DBMS-10,Query Processing and Optimization,Unit 5
