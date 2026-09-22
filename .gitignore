@@ -1,0 +1,54 @@
+# ─────────────────────────────────────────────
+# ExamLens .gitignore
+# ─────────────────────────────────────────────
+
+# Python virtual environment — never commit this
+venv/
+.venv/
+env/
+.env/
+
+# Python cache files — auto-generated, not needed in repo
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Environment variables — contains secrets / local paths
+# .env.example IS committed; .env is NOT
+.env
+
+# SQLite dev database — local only; Member 6 owns the real DB
+*.db
+*.sqlite
+*.sqlite3
+
+# pytest cache and coverage reports
+.pytest_cache/
+.coverage
+htmlcov/
+
+# VS Code settings (optional: remove this line if your team shares settings)
+.vscode/
+
+# OS-generated junk
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Output folder — parsed results are generated, not tracked
+backend/output/*.json
+backend/output/*.csv
+
+# Tesseract temp images (if any are written to disk)
+*.tiff
+*.tif
+
+# Jupyter notebooks (not part of this module)
+*.ipynb
+.ipynb_checkpoints/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
