@@ -62,8 +62,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register Routers
+# ── Register Routers ──────────────────────────────────────────────────────────
+# Each member uncomments their two lines below.
+# Git treats each line independently → no merge conflicts.
+
+# Member 3 — Exam parser & syllabus (this branch)
 app.include_router(exam_router)
+
+# Member 4 — NLP / topic classification
+# from app.api.nlp_routes import router as nlp_router
+# app.include_router(nlp_router)
+
+# Member 5 — Analytics
+# from app.routers.analytics import router as analytics_router
+# app.include_router(analytics_router)
+
+# Member 6 — Frontend ingestion / auth
+# from app.routers.ingestion import router as ingestion_router
+# app.include_router(ingestion_router)
 
 
 @app.get("/", tags=["Health & Info"])

@@ -284,21 +284,21 @@ def extract_exam_type(text: str) -> Optional[str]:
 # Listed from most specific to least specific.
 # We stop at the first match.
 _MARKS_PATTERNS = [
-    # [5 marks], [5 Marks], [5 MARKS], [5 M], [5m]
-    re.compile(r"\[(\d+)\s*(?:[Mm]arks?|[Mm])\]"),
+    # [5 marks], [5 Marks], [5 MARKS]
+    re.compile(r"\[(\d+)\s*[Mm]arks?\]"),
 
-    # (5 marks), (5 Marks), (5 MARKS), (5 M), (5m)
-    re.compile(r"\((\d+)\s*(?:[Mm]arks?|[Mm])\)"),
+    # (5 marks), (5 Marks)
+    re.compile(r"\((\d+)\s*[Mm]arks?\)"),
 
     # 5 marks  (standalone, with word boundary)
     re.compile(r"\b(\d+)\s+[Mm]arks?\b"),
 
-    # Marks: 5  or  Marks = 5  or  [Marks: 5]
+    # Marks: 5  or  Marks = 5
     re.compile(r"(?i)[Mm]arks?\s*[:=]\s*(\d+)"),
 
-    # Standalone brackets with numbers at the very end of the line/question e.g. "Explain DBMS. [10]" or "... (10)"
-    # Avoids matching MCQ options like "(1) Option A\n(2) Option B" at start of lines
-    re.compile(r"(?:^|[^\n(])(?:\[|\s\()(\d{1,2})[\]\)]\s*$"),
+    # (05)  or  [05]  — marks in brackets without the word
+    # Only match if it's a small number (1-20), to avoid matching years
+    re.compile(r"[\[(](\d{1,2})[\])]"),
 ]
 
 def extract_marks(text: str) -> Optional[int]:

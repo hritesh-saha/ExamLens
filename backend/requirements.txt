@@ -27,6 +27,9 @@ python-multipart>=0.0.9
 # Data validation & models
 pydantic==2.9.2
 
+# SQLAlchemy ORM (used by app/database/__init__.py for Member 5 analytics compatibility)
+sqlalchemy>=2.0.0
+
 # Environment variables (.env support)
 python-dotenv==1.0.1
 

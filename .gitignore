@@ -40,9 +40,21 @@ desktop.ini
 backend/output/*.json
 backend/output/*.csv
 
-# Tesseract temp images (if any are written to disk)
+# Tesseract temp images and output files (written to disk during OCR)
 *.tiff
 *.tif
+tess_*.txt
+tess_o*.txt
+
+# Uploaded exam papers and syllabus CSVs — local data, not for repo
+backend/data/papers/*
+backend/data/syllabus/*
+# Keep the folders themselves
+!backend/data/papers/.gitkeep
+!backend/data/syllabus/.gitkeep
+
+# Log files
+*.log
 
 # Jupyter notebooks (not part of this module)
 *.ipynb
@@ -52,3 +64,9 @@ backend/output/*.csv
 dist/
 build/
 *.egg-info/
+
+# JetBrains IDEs (PyCharm, etc.)
+.idea/
+
+# Sample PDFs — binary files that bloat the repo
+*.pdf
