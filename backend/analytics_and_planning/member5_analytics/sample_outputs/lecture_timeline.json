@@ -1,0 +1,116 @@
+{
+  "timeline": [
+    {
+      "document_id": "lecture_01",
+      "lecture_date": "2026-08-03",
+      "n_pages": 2,
+      "topics": [
+        {
+          "topic_id": 1,
+          "name": "Arrays and Complexity Analysis",
+          "syllabus_unit": "Unit 1: Fundamentals"
+        },
+        {
+          "topic_id": 2,
+          "name": "Recursion",
+          "syllabus_unit": "Unit 1: Fundamentals"
+        }
+      ],
+      "syllabus_units": [
+        "Unit 1: Fundamentals"
+      ]
+    },
+    {
+      "document_id": "lecture_02",
+      "lecture_date": "2026-08-06",
+      "n_pages": 1,
+      "topics": [
+        {
+          "topic_id": 3,
+          "name": "Sorting Algorithms",
+          "syllabus_unit": "Unit 1: Fundamentals"
+        }
+      ],
+      "syllabus_units": [
+        "Unit 1: Fundamentals"
+      ]
+    },
+    {
+      "document_id": "lecture_03",
+      "lecture_date": "2026-08-09",
+      "n_pages": 2,
+      "topics": [
+        {
+          "topic_id": 5,
+          "name": "Linked Lists",
+          "syllabus_unit": "Unit 2: Linear Structures"
+        },
+        {
+          "topic_id": 6,
+          "name": "Stacks",
+          "syllabus_unit": "Unit 2: Linear Structures"
+        }
+      ],
+      "syllabus_units": [
+        "Unit 2: Linear Structures"
+      ]
+    },
+    {
+      "document_id": "lecture_04",
+      "lecture_date": "2026-08-12",
+      "n_pages": 1,
+      "topics": [
+        {
+          "topic_id": 7,
+          "name": "Queues",
+          "syllabus_unit": "Unit 2: Linear Structures"
+        }
+      ],
+      "syllabus_units": [
+        "Unit 2: Linear Structures"
+      ]
+    },
+    {
+      "document_id": "lecture_05",
+      "lecture_date": "2026-08-15",
+      "n_pages": 1,
+      "topics": [
+        {
+          "topic_id": 9,
+          "name": "Binary Trees and Traversals",
+          "syllabus_unit": "Unit 3: Trees"
+        }
+      ],
+      "syllabus_units": [
+        "Unit 3: Trees"
+      ]
+    },
+    {
+      "document_id": "lecture_06",
+      "lecture_date": "2026-08-18",
+      "n_pages": 2,
+      "topics": [
+        {
+          "topic_id": 13,
+          "name": "Graph Representation",
+          "syllabus_unit": "Unit 4: Graphs"
+        },
+        {
+          "topic_id": 14,
+          "name": "BFS and DFS",
+          "syllabus_unit": "Unit 4: Graphs"
+        }
+      ],
+      "syllabus_units": [
+        "Unit 4: Graphs"
+      ]
+    }
+  ],
+  "unscheduled": [],
+  "data_quality": {
+    "n_lectures": 6,
+    "n_unscheduled": 0,
+    "n_date_conflicts": 0,
+    "date_conflicts": []
+  }
+}

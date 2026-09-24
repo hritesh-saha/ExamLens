@@ -46,9 +46,17 @@ _STEMS = {
 _SECTION = {2: "A", 5: "B", 10: "C"}
 _PAPER_PATTERN = [10, 10, 5, 5, 5, 5, 2, 2, 2, 2, 2]   # marks per question in one paper (total 50)
 
-# topics (by name) that the fake lecture notes cover
-_NOTED = ["Arrays and Complexity Analysis", "Recursion", "Sorting Algorithms", "Linked Lists",
-          "Stacks", "Queues", "Binary Trees and Traversals", "Graph Representation", "BFS and DFS"]
+# fake lectures: (topics covered, number of pages/photos merged into that lecture's document).
+# Deliberately mixes single- and multi-topic lectures, since a real board lecture
+# often covers more than one syllabus topic (tests that the timeline shows ALL of them).
+_LECTURES = [
+    (["Arrays and Complexity Analysis", "Recursion"], 2),
+    (["Sorting Algorithms"], 1),
+    (["Linked Lists", "Stacks"], 2),
+    (["Queues"], 1),
+    (["Binary Trees and Traversals"], 1),
+    (["Graph Representation", "BFS and DFS"], 2),
+]
 
 
 def make_dummy_data(seed: int = 42, years=range(2018, 2026)):
@@ -100,20 +108,30 @@ def make_dummy_data(seed: int = 42, years=range(2018, 2026)):
     questions["marks"] = questions["marks"].astype("Int64")
     questions["year"] = questions["year"].astype("Int64")
 
-    # one lecture (page) per noted topic, weekly dates
-    note_rows = []
-    for i, name in enumerate(_NOTED):
-        note_rows.append({
-            "id": i + 1, "document_id": f"lecture_{i + 1:02d}", "page": 1,
-            "lecture_date": (pd.Timestamp("2026-08-03") + pd.Timedelta(days=3 * i)).date().isoformat(),
-            "text": f"Notes on {name}.", "latex": None,
-            "confidence": round(float(rng.uniform(0.75, 0.97)), 2),
-        })
-    notes = pd.DataFrame(note_rows)
+    # Lectures: pages of the same lecture share one document_id and one
+    # lecture_date (per Member 1). Topics are tagged per page (per Member 4's
+    # note_topics link table); a multi-topic lecture spreads its topics
+    # across its pages round-robin.
+    note_rows, note_topic_rows = [], []
+    note_id = 1
+    for i, (topic_names, n_pages) in enumerate(_LECTURES):
+        doc_id = f"lecture_{i + 1:02d}"
+        date = (pd.Timestamp("2026-08-03") + pd.Timedelta(days=3 * i)).date().isoformat()
+        page_note_ids = []
+        for p in range(1, n_pages + 1):
+            note_rows.append({
+                "id": note_id, "document_id": doc_id, "page": p, "lecture_date": date,
+                "text": f"Notes on {', '.join(topic_names)} (page {p}).", "latex": None,
+                "confidence": round(float(rng.uniform(0.75, 0.97)), 2),
+            })
+            page_note_ids.append(note_id)
+            note_id += 1
+        for j, name in enumerate(topic_names):
+            note_topic_rows.append({"note_id": page_note_ids[j % len(page_note_ids)],
+                                    "topic_id": name_to_id[name]})
 
-    # note_topics link table (Member 4's chosen design: separate table, not a column on Note)
-    note_topics = pd.DataFrame(
-        [{"note_id": i + 1, "topic_id": name_to_id[name]} for i, name in enumerate(_NOTED)])
+    notes = pd.DataFrame(note_rows)
+    note_topics = pd.DataFrame(note_topic_rows)
 
     return topics, questions, notes, note_topics
 

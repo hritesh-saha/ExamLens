@@ -1,0 +1,414 @@
+{
+  "summary": {
+    "n_topics": 20,
+    "n_topics_asked": 17,
+    "n_topics_with_notes": 9,
+    "n_questions": 90,
+    "n_out_of_syllabus": 2,
+    "expected_marks_covered_by_notes_pct": 56.0
+  },
+  "data_quality": {
+    "n_questions": 90,
+    "missing_year": 1,
+    "missing_marks": 2,
+    "missing_topic_id": 2,
+    "note": "Questions with missing year are excluded from year-based stats (coverage, planner). Questions with missing marks are treated as 0 marks in sums, which understates expected_marks -- get these backfilled where possible."
+  },
+  "never_asked_topics": [
+    {
+      "topic_id": 18,
+      "name": "Greedy Algorithms",
+      "syllabus_unit": "Unit 5: Advanced",
+      "has_notes": false
+    },
+    {
+      "topic_id": 19,
+      "name": "B-Trees",
+      "syllabus_unit": "Unit 5: Advanced",
+      "has_notes": false
+    },
+    {
+      "topic_id": 20,
+      "name": "Tries",
+      "syllabus_unit": "Unit 5: Advanced",
+      "has_notes": false
+    }
+  ],
+  "out_of_syllabus_questions": [
+    {
+      "id": 89,
+      "year": 2019,
+      "marks": 5,
+      "text": "Explain the CAP theorem.",
+      "document_id": "paper_2019",
+      "page": 2
+    },
+    {
+      "id": 90,
+      "year": 2023,
+      "marks": 5,
+      "text": "Describe how MapReduce works.",
+      "document_id": "paper_2023",
+      "page": 2
+    }
+  ],
+  "frequent_without_notes": [
+    {
+      "topic_id": 11,
+      "name": "AVL Trees",
+      "syllabus_unit": "Unit 3: Trees",
+      "years_asked": 7,
+      "year_share": 0.875,
+      "expected_marks": 5.0995547394,
+      "max_repeat_count": 2
+    },
+    {
+      "topic_id": 15,
+      "name": "Shortest Path",
+      "syllabus_unit": "Unit 4: Graphs",
+      "years_asked": 5,
+      "year_share": 0.625,
+      "expected_marks": 3.1200209061,
+      "max_repeat_count": 2
+    },
+    {
+      "topic_id": 17,
+      "name": "Dynamic Programming",
+      "syllabus_unit": "Unit 5: Advanced",
+      "years_asked": 4,
+      "year_share": 0.5,
+      "expected_marks": 2.7928617219,
+      "max_repeat_count": 2
+    },
+    {
+      "topic_id": 16,
+      "name": "Minimum Spanning Tree",
+      "syllabus_unit": "Unit 4: Graphs",
+      "years_asked": 5,
+      "year_share": 0.625,
+      "expected_marks": 2.3604558327,
+      "max_repeat_count": 3
+    },
+    {
+      "topic_id": 4,
+      "name": "Searching Algorithms",
+      "syllabus_unit": "Unit 1: Fundamentals",
+      "years_asked": 6,
+      "year_share": 0.75,
+      "expected_marks": 2.2899599811,
+      "max_repeat_count": 4
+    },
+    {
+      "topic_id": 10,
+      "name": "Binary Search Trees",
+      "syllabus_unit": "Unit 3: Trees",
+      "years_asked": 6,
+      "year_share": 0.75,
+      "expected_marks": 1.7165140675,
+      "max_repeat_count": 3
+    },
+    {
+      "topic_id": 12,
+      "name": "Heaps",
+      "syllabus_unit": "Unit 3: Trees",
+      "years_asked": 4,
+      "year_share": 0.5,
+      "expected_marks": 1.708054518,
+      "max_repeat_count": 2
+    }
+  ],
+  "heatmap": {
+    "years": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "topics": [
+      {
+        "topic_id": 1,
+        "name": "Arrays and Complexity Analysis",
+        "marks_by_year": [
+          0,
+          0,
+          10,
+          2,
+          0,
+          5,
+          0,
+          0
+        ]
+      },
+      {
+        "topic_id": 2,
+        "name": "Recursion",
+        "marks_by_year": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+        ]
+      },
+      {
+        "topic_id": 3,
+        "name": "Sorting Algorithms",
+        "marks_by_year": [
+          5,
+          5,
+          2,
+          0,
+          5,
+          10,
+          5,
+          2
+        ]
+      },
+      {
+        "topic_id": 4,
+        "name": "Searching Algorithms",
+        "marks_by_year": [
+          0,
+          2,
+          10,
+          2,
+          2,
+          2,
+          0,
+          2
+        ]
+      },
+      {
+        "topic_id": 5,
+        "name": "Linked Lists",
+        "marks_by_year": [
+          0,
+          0,
+          0,
+          10,
+          10,
+          0,
+          10,
+          2
+        ]
+      },
+      {
+        "topic_id": 6,
+        "name": "Stacks",
+        "marks_by_year": [
+          2,
+          2,
+          0,
+          2,
+          2,
+          10,
+          2,
+          5
+        ]
+      },
+      {
+        "topic_id": 7,
+        "name": "Queues",
+        "marks_by_year": [
+          2,
+          2,
+          2,
+          5,
+          2,
+          0,
+          2,
+          5
+        ]
+      },
+      {
+        "topic_id": 8,
+        "name": "Hashing",
+        "marks_by_year": [
+          0,
+          10,
+          5,
+          0,
+          5,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "topic_id": 9,
+        "name": "Binary Trees and Traversals",
+        "marks_by_year": [
+          0,
+          2,
+          2,
+          5,
+          0,
+          2,
+          2,
+          10
+        ]
+      },
+      {
+        "topic_id": 10,
+        "name": "Binary Search Trees",
+        "marks_by_year": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          5,
+          0,
+          0
+        ]
+      },
+      {
+        "topic_id": 11,
+        "name": "AVL Trees",
+        "marks_by_year": [
+          2,
+          5,
+          5,
+          10,
+          0,
+          2,
+          10,
+          5
+        ]
+      },
+      {
+        "topic_id": 12,
+        "name": "Heaps",
+        "marks_by_year": [
+          5,
+          0,
+          5,
+          2,
+          5,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "topic_id": 13,
+        "name": "Graph Representation",
+        "marks_by_year": [
+          0,
+          5,
+          0,
+          0,
+          0,
+          0,
+          5,
+          2
+        ]
+      },
+      {
+        "topic_id": 14,
+        "name": "BFS and DFS",
+        "marks_by_year": [
+          10,
+          0,
+          5,
+          5,
+          5,
+          2,
+          5,
+          5
+        ]
+      },
+      {
+        "topic_id": 15,
+        "name": "Shortest Path",
+        "marks_by_year": [
+          5,
+          0,
+          2,
+          0,
+          0,
+          2,
+          2,
+          10
+        ]
+      },
+      {
+        "topic_id": 16,
+        "name": "Minimum Spanning Tree",
+        "marks_by_year": [
+          2,
+          0,
+          0,
+          0,
+          2,
+          5,
+          5,
+          2
+        ]
+      },
+      {
+        "topic_id": 17,
+        "name": "Dynamic Programming",
+        "marks_by_year": [
+          5,
+          5,
+          0,
+          0,
+          10,
+          5,
+          0,
+          0
+        ]
+      },
+      {
+        "topic_id": 18,
+        "name": "Greedy Algorithms",
+        "marks_by_year": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "topic_id": 19,
+        "name": "B-Trees",
+        "marks_by_year": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "topic_id": 20,
+        "name": "Tries",
+        "marks_by_year": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  }
+}

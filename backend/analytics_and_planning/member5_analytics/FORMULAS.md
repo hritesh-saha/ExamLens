@@ -50,7 +50,40 @@ Input: `days_left`, `hours_per_day`. Budget = days × hours.
 - Effort is a flat 2 h per topic (no per-topic difficulty data). It can be overridden by adding an `effort_hours` column to the Topic table.
 - Topics are not grouped by syllabus unit within a day (possible Week 2 improvement).
 
-## 4. Confirmed with teammates (Week 1 answers)
+## 4. Answer-length hints (`answer_length.py`)
+
+Maps a question's `marks` to a suggested word count and writing time, shown on the practice set and flashcards.
+
+**Why not a flat "words per mark" ratio:** real mark schemes aren't perfectly linear — a 2-mark "define X" needs relatively more words per mark than a 10-mark "discuss X in detail," because there's a fixed minimum to write a coherent sentence at all. So instead of `words = marks × constant`, the code interpolates between three anchor points from the project brief (2 marks → 50 words, 5 → 150, 10 → 300) and extrapolates beyond them using the slope of the nearest segment. Time estimate: `words / 12` (12 words/minute is a typical handwritten exam speed — tune this in `config.py` if it doesn't match your syllabus's expectations).
+
+| marks | suggested words | suggested minutes |
+|---|---|---|
+| 1 | 15 | 1 |
+| 2 | 50 | 4 |
+| 5 | 150 | 12 |
+| 10 | 300 | 25 |
+| 15 | 450 | 38 |
+
+A question with null `marks` gets `None` for both fields rather than a guessed value.
+
+## 5. Lecture timeline (`lecture_timeline.py`)
+
+One entry per lecture, sorted chronologically, showing every topic it covers.
+
+**Grouping (confirmed with Member 1):** a lecture is one `document_id`. All pages/photos merged into that document share one `lecture_date`, so lectures group by `document_id`, not by individual page timestamp.
+
+**All topics shown, not just one (confirmed with Member 4):** if a lecture is tagged with 3 topics and only 1 is shown, the other 2 would look like they have no notes yet -- a false coverage gap. So every topic tagged to any page of the lecture is listed.
+
+**No subject field (confirmed with Member 6):** subject/unit context comes from `NoteTopic -> Topic.syllabus_unit`, joined at read time. A lecture's `syllabus_units` list is the deduplicated set of units its topics belong to.
+
+**Sorting (confirmed with Member 6):** `lecture_date` is a sortable ISO 8601 string (`YYYY-MM-DD` or `YYYY-MM-DDTHH:MM:SS`), so chronological order is a plain string sort -- no date parsing needed.
+
+**Edge cases handled:**
+- A lecture with no `lecture_date` on any page goes into a separate `unscheduled` list rather than breaking the sort order of `timeline`.
+- If a lecture's pages disagree on `lecture_date` (shouldn't happen per Member 1's design, but data can be messy), the earliest date is used and the conflict is reported in `data_quality.date_conflicts` so it's visible, not silently picked.
+- A lecture with no topics tagged yet (classification hasn't run) shows an empty topic list rather than erroring.
+
+## 6. Confirmed with teammates (Week 1 answers)
 
 | With | Answer | What changed in the code |
 |---|---|---|
@@ -58,18 +91,13 @@ Input: `days_left`, `hours_per_day`. Budget = days × hours.
 | Member 4 | "No confident topic" = `topic_id = null` (no placeholder string). Notes link to topics via a separate **`note_topics` link table** (`note_id`, `topic_id`), not a JSON/CSV column on Note. `repeat_group_id` is null unless 2+ similar questions exist. | `compute_topic_stats`, `coverage_report` and `plan_from_tables` now take an optional `note_topics` DataFrame and join through it. A legacy `topic_ids` column on `notes` is still supported as a fallback if that's ever what actually ships. |
 | Member 6 | Schema confirmed (see `sql_loader.py`). FastAPI will query with SQLAlchemy/raw SQL, `pd.read_sql` into a DataFrame, and pass it straight to these functions. | `sql_loader.py` has the exact `SELECT` per table against this schema, so Member 6 can copy them directly into the FastAPI endpoints. |
 
-### ⚠️ Open conflict to resolve before Week 2 build starts
+### Schema conflict — resolved
 
-Member 6's schema draft still lists `topic_ids` as a column on the **Note** table. Member 4 said notes will link to topics through a separate **`note_topics`** table instead. These can't both be true — pick one:
+Earlier the written schema draft listed `topic_ids` as a column on `Note`, which conflicted with Member 4's plan for a link table. Checked against Member 6's actual repo (`app/models.py`): `Note` has no `topic_ids` column, and there's a proper `NoteTopic(note_id, topic_id)` link table. No action needed — this matches what the code below is built against.
 
-- **Recommended:** drop `topic_ids` from `Note`, use `note_topics(note_id, topic_id)`. Cleaner for joins/aggregation, and it's what my code is built against by default.
-- If Member 6 prefers to keep the column instead, tell me and I'll switch the default (the fallback path already works, just needs to become primary).
+## 7. Open items for Week 2/3
 
-Get Member 3, 4 and 6 to align on this on Day 1 of Week 2 so the schema is only built once.
-
-## 5. Open items for Week 2
-
-- Answer-length hints (marks -> suggested word count)
-- Lecture timeline (chronological notes with subject/topic tags)
+- ~~Answer-length hints~~ — done (section 4)
+- ~~Lecture timeline~~ — done (section 5)
 - Practice set generator (sampling that matches the historical marks distribution)
 - Back-test: hide the latest paper, run the model on earlier years, check whether high-priority topics actually appeared (this is how you defend the due-score heuristic)

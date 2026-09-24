@@ -3,7 +3,7 @@ Prints a readable summary and writes sample JSON outputs for Member 6 (frontend 
 import json
 from pathlib import Path
 
-from . import compute_topic_stats, coverage_report, plan_from_tables
+from . import compute_topic_stats, coverage_report, plan_from_tables, add_answer_length_hints, build_lecture_timeline
 from .dummy_data import make_dummy_data
 
 OUT = Path(__file__).parent / "sample_outputs"
@@ -16,6 +16,12 @@ def main():
     report = coverage_report(topics, questions, notes, note_topics)
     plan = plan_from_tables(topics, questions, notes, days_left=7, hours_per_day=3, note_topics=note_topics)
     stats = compute_topic_stats(topics, questions, notes, note_topics)
+    with_hints = add_answer_length_hints(questions)
+    with_hints[["id", "marks", "suggested_words", "suggested_minutes"]].to_csv(
+        OUT / "answer_length_hints.csv", index=False)
+
+    timeline = build_lecture_timeline(notes, note_topics, topics)
+    (OUT / "lecture_timeline.json").write_text(json.dumps(timeline, indent=2))
 
     (OUT / "coverage_report.json").write_text(json.dumps(report, indent=2))
     (OUT / "study_plan.json").write_text(json.dumps(plan, indent=2))
@@ -30,6 +36,12 @@ def main():
         blocks = ", ".join(f"{b['topic']} ({b['hours']}h{' *needs notes' if b['needs_notes'] else ''})" for b in d["blocks"])
         print(f"  Day {d['day']}: {blocks}")
     print(f"\nSample JSON written to {OUT}")
+    print("Answer-length hints sample:")
+    print(with_hints[["marks", "suggested_words", "suggested_minutes"]].dropna().head(5).to_string(index=False))
+    print("\nLECTURE TIMELINE:")
+    for e in timeline["timeline"]:
+        print(f"  {e['lecture_date']}  {e['document_id']} ({e['n_pages']}p) -> "
+              f"{[t['name'] for t in e['topics']]}")
 
 
 if __name__ == "__main__":

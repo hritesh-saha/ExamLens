@@ -17,6 +17,8 @@ from examlens_analytics.dummy_data import make_dummy_data
 topics, questions, notes, note_topics = make_dummy_data()   # later: DataFrames from SQLite
 coverage_report(topics, questions, notes, note_topics)      # -> dict for the Coverage panel
 plan_from_tables(topics, questions, notes, days_left=7, hours_per_day=3, note_topics=note_topics)
+build_lecture_timeline(notes, note_topics, topics)           # -> dict for the Timeline panel
+add_answer_length_hints(questions)                            # -> questions table + word/time columns
 ```
 
 `note_topics` (note_id, topic_id) is the link table Member 4 confirmed. See `FORMULAS.md`
@@ -28,8 +30,10 @@ section 4 for a schema conflict with Member 6 that still needs resolving.
 - `coverage.py`, `planner.py`: the two Week 1 features
 - `dummy_data.py`: fake data following the shared contract, with planted gaps and null year/marks
 - `sql_loader.py`: reference SQL queries for Member 6's FastAPI layer, against the confirmed schema
+- `answer_length.py`: marks -> suggested word count / time (for practice set + flashcards)
+- `lecture_timeline.py`: chronological lecture list with all tagged topics
 - `sample_outputs/`: example JSON for Member 6's frontend
-- `tests/`: hand-verified tests (21)
+- `tests/`: hand-verified tests (42)
 
-## Coming in Weeks 2-3
-Answer-length hints, lecture timeline, FastAPI endpoints, practice set, back-test.
+## Coming in Week 3
+Practice set, back-test.

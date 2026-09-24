@@ -19,5 +19,11 @@ class Params:
     # --- coverage ---
     frequent_year_share: float = 0.4    # "frequently asked" = appeared in >= 40% of exam years
 
+    # --- answer-length hints ---
+    # (marks -> suggested words), anchors from the project brief; other mark
+    # values are interpolated/extrapolated linearly between these.
+    answer_length_anchors: tuple[tuple[int, int], ...] = ((2, 50), (5, 150), (10, 300))
+    writing_words_per_minute: float = 12.0   # typical handwritten exam speed, for the time estimate
+
 
 DEFAULT_PARAMS = Params()
