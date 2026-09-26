@@ -37,6 +37,7 @@ class NoteTopic(Base):
 
     note_id = Column(Integer, ForeignKey("Note.id"), primary_key=True)
     topic_id = Column(Integer, ForeignKey("Topic.id"), primary_key=True)
+    confidence = Column(Float, nullable=True)
 
 class Question(Base):
     __tablename__ = "Question"
@@ -59,4 +60,6 @@ class Flashcard(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     note_id = Column(Integer, ForeignKey("Note.id"), nullable=False)
+    front = Column(String, nullable=False)
+    back = Column(String, nullable=False)
     linked_question_id = Column(Integer, ForeignKey("Question.id"), nullable=True)

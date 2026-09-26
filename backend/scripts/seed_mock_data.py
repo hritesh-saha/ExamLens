@@ -2,7 +2,7 @@ import json
 import os
 from sqlalchemy.orm import Session
 from app.database import engine, Base
-from app.models import Topic, Question, Document
+from app.models import Topic, Question, Document, Note, NoteTopic
 
 def seed_data():
     Base.metadata.create_all(bind=engine)
@@ -38,22 +38,44 @@ def seed_data():
         with open(questions_path, "r") as f:
             questions_data = json.load(f)
             for item in questions_data:
-                q = Question(
-                    document_id=item["document_id"],
-                    page=item["page"],
-                    year=item["year"],
-                    exam_type=item["exam_type"],
-                    section=item["section"],
-                    marks=item["marks"],
-                    is_compulsory=item["is_compulsory"],
-                    raw_text=item["raw_text"],
-                    cleaned_text=item["raw_text"],  # Default cleaned_text to raw_text for seed
-                    topic_id=None,
-                    repeat_group_id=None
-                )
-                session.add(q)
+                existing_q = session.query(Question).filter_by(raw_text=item["raw_text"]).first()
+                if not existing_q:
+                    q = Question(
+                        document_id=item["document_id"],
+                        page=item["page"],
+                        year=item["year"],
+                        exam_type=item["exam_type"],
+                        section=item["section"],
+                        marks=item["marks"],
+                        is_compulsory=item["is_compulsory"],
+                        raw_text=item["raw_text"],
+                        cleaned_text=item["raw_text"],
+                        topic_id=None,
+                        repeat_group_id=None
+                    )
+                    session.add(q)
         session.commit()
         print("Sample questions seeded successfully.")
+
+    # 4. Seed Sample Note & NoteTopic
+    existing_note = session.query(Note).filter_by(id=1).first()
+    if not existing_note:
+        dummy_note = Note(
+            document_id=1,
+            page=1,
+            lecture_date="2026-09-26",
+            text="Q: What are the ACID properties?\nA: Atomicity, Consistency, Isolation, Durability. These ensure reliable transactions.",
+            latex=None,
+            confidence=0.95
+        )
+        session.add(dummy_note)
+        session.commit()
+
+        # Link the note to Topic 2 (Transactions & ACID Properties)
+        note_topic = NoteTopic(note_id=dummy_note.id, topic_id=2, confidence=0.88)
+        session.add(note_topic)
+        session.commit()
+        print("Sample Note and NoteTopic seeded successfully.")
 
     session.close()
 
