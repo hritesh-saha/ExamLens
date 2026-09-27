@@ -1,21 +1,10 @@
 # ExamLens
 
-**ExamLens** turns lecture-board photos and past question papers into a connected study system.
 
-## Members
-
-| Member | Role |
-|--------|------|
-| Member 1 | Vision (board photo capture) |
-| Member 2 | OCR + Math extraction |
-| Member 3 | **Exam Parsing Lead** ← this module |
-| Member 4 | NLP + Topic Classification |
-| Member 5 | Analytics + Study Planning |
-| Member 6 | Platform, DB, FastAPI, Frontend |
 
 ---
 
-## Member 3 — Exam Parser Module
+##  Exam Parser Module
 
 This module is responsible for turning raw PDF question papers into structured `Question` records stored in the shared database.
 
@@ -39,24 +28,7 @@ Structured Question records
 SQLite (dev) → Member 6's shared DB (production)
 ```
 
-### Output Contract
 
-Each `Question` record produced by this module contains:
-
-| Field | Produced by |
-|-------|-------------|
-| `question_id` | Member 3 (generated) |
-| `document_id` | Member 6 (provided as input) |
-| `page` | Member 3 |
-| `raw_text` | Member 3 |
-| `cleaned_text` | **NULL** — filled by Member 4 |
-| `year` | Member 3 |
-| `exam_type` | Member 3 |
-| `section` | Member 3 |
-| `marks` | Member 3 |
-| `is_compulsory` | Member 3 |
-| `topic_id` | **NULL** — filled by Member 4 |
-| `repeat_group_id` | **NULL** — filled by Member 4 |
 
 ---
 
