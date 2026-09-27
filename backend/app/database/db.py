@@ -15,6 +15,7 @@ Key design points:
   - Enforces foreign key constraints (PRAGMA foreign_keys = ON)
   - Fully compatible with Question, ParsedDocument, and Topic Pydantic models
   - Supports in-memory database (":memory:") for fast testing
+  - Table names (Document, Question, Topic) match Member 6's SQLAlchemy models.py
 """
 
 import os
@@ -75,26 +76,36 @@ def init_db(db_path: Optional[str] = None) -> None:
 def insert_document(
     file_name: str,
     file_path: Optional[str] = None,
-    total_pages: int = 0,
+    source_pages: int = 0,
     year: Optional[int] = None,
     exam_type: Optional[str] = None,
+    doc_type: Optional[str] = None,
     db_path: Optional[str] = None,
 ) -> int:
     """
-    Insert a document record into the `documents` table.
+    Insert a document record into the `Document` table.
+
+    Args:
+        file_name:    Name of the PDF file.
+        file_path:    Full path to the PDF on disk.
+        source_pages: Total number of pages in the document.
+        year:         Exam year extracted from the document header.
+        exam_type:    Exam type (e.g. "End Semester").
+        doc_type:     Document type — "lecture_board" or "question_paper".
+        db_path:      Path to SQLite file, or None for default.
 
     Returns:
-        document_id (int): Auto-incremented primary key.
+        id (int): Auto-incremented primary key of the inserted document.
     """
     conn = get_connection(db_path)
     try:
         cursor = conn.cursor()
         cursor.execute(
             """
-            INSERT INTO documents (file_name, file_path, total_pages, year, exam_type)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO Document (file_name, file_path, source_pages, year, exam_type, type)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
-            (file_name, file_path, total_pages, year, exam_type),
+            (file_name, file_path, source_pages, year, exam_type, doc_type),
         )
         conn.commit()
         return cursor.lastrowid
@@ -103,11 +114,11 @@ def insert_document(
 
 
 def get_document_by_id(document_id: int, db_path: Optional[str] = None) -> Optional[Dict[str, Any]]:
-    """Retrieve a single document row by its document_id."""
+    """Retrieve a single document row by its id."""
     conn = get_connection(db_path)
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM documents WHERE document_id = ?", (document_id,))
+        cursor.execute("SELECT * FROM Document WHERE id = ?", (document_id,))
         row = cursor.fetchone()
         return dict(row) if row else None
     finally:
@@ -119,7 +130,7 @@ def get_all_documents(db_path: Optional[str] = None) -> List[Dict[str, Any]]:
     conn = get_connection(db_path)
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM documents ORDER BY document_id DESC")
+        cursor.execute("SELECT * FROM Document ORDER BY id DESC")
         return [dict(row) for row in cursor.fetchall()]
     finally:
         conn.close()
@@ -130,7 +141,10 @@ def get_all_documents(db_path: Optional[str] = None) -> List[Dict[str, Any]]:
 # ═══════════════════════════════════════════════════════════════════
 
 def _question_to_tuple(q: Union[Question, Dict[str, Any]]) -> tuple:
-    """Convert Question object or dict to SQL parameter tuple."""
+    """
+    Convert Question object or dict to SQL parameter tuple.
+    Note: the Pydantic field is named `raw_text`; it maps to the `text` DB column.
+    """
     if isinstance(q, Question):
         is_comp = None
         if q.is_compulsory is not None:
@@ -139,7 +153,7 @@ def _question_to_tuple(q: Union[Question, Dict[str, Any]]) -> tuple:
             q.question_id,
             q.document_id,
             q.page,
-            q.raw_text,
+            q.raw_text,        # Pydantic field raw_text → DB column `text`
             q.year,
             q.exam_type,
             q.section,
@@ -157,7 +171,7 @@ def _question_to_tuple(q: Union[Question, Dict[str, Any]]) -> tuple:
             q["question_id"],
             q["document_id"],
             q["page"],
-            q["raw_text"],
+            q["raw_text"],     # dict key raw_text → DB column `text`
             q.get("year"),
             q.get("exam_type"),
             q.get("section"),
@@ -171,7 +185,7 @@ def _question_to_tuple(q: Union[Question, Dict[str, Any]]) -> tuple:
 
 def insert_question(question: Union[Question, Dict[str, Any]], db_path: Optional[str] = None) -> int:
     """
-    Insert a single question into the `questions` table.
+    Insert a single question into the `Question` table.
 
     Returns:
         id (int): Auto-incremented primary key.
@@ -181,8 +195,8 @@ def insert_question(question: Union[Question, Dict[str, Any]], db_path: Optional
         cursor = conn.cursor()
         cursor.execute(
             """
-            INSERT INTO questions (
-                question_id, document_id, page, raw_text,
+            INSERT INTO Question (
+                question_id, document_id, page, text,
                 year, exam_type, section, marks, is_compulsory,
                 cleaned_text, topic_id, repeat_group_id
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -214,8 +228,8 @@ def insert_questions_batch(
         tuples = [_question_to_tuple(q) for q in questions]
         cursor.executemany(
             """
-            INSERT INTO questions (
-                question_id, document_id, page, raw_text,
+            INSERT INTO Question (
+                question_id, document_id, page, text,
                 year, exam_type, section, marks, is_compulsory,
                 cleaned_text, topic_id, repeat_group_id
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -239,7 +253,7 @@ def save_parsed_document(
     in a single database transaction.
 
     Returns:
-        int: The document_id assigned to the document.
+        int: The id assigned to the document.
     """
     conn = get_connection(db_path)
     try:
@@ -248,7 +262,7 @@ def save_parsed_document(
         # Insert document header
         cursor.execute(
             """
-            INSERT INTO documents (file_name, file_path, total_pages, year, exam_type)
+            INSERT INTO Document (file_name, file_path, source_pages, year, exam_type)
             VALUES (?, ?, ?, ?, ?)
             """,
             (file_name, file_path, parsed_doc.total_pages, parsed_doc.year, parsed_doc.exam_type),
@@ -257,7 +271,6 @@ def save_parsed_document(
 
         # Insert questions linked to doc_id
         if parsed_doc.questions:
-            # Update questions to ensure document_id matches the created doc_id
             tuples = []
             for q in parsed_doc.questions:
                 is_comp = None
@@ -265,9 +278,9 @@ def save_parsed_document(
                     is_comp = 1 if q.is_compulsory else 0
                 tuples.append((
                     q.question_id,
-                    doc_id,  # Link to the newly generated document_id
+                    doc_id,          # Link to the newly generated document id
                     q.page,
-                    q.raw_text,
+                    q.raw_text,      # Pydantic raw_text → DB column `text`
                     q.year if q.year is not None else parsed_doc.year,
                     q.exam_type if q.exam_type is not None else parsed_doc.exam_type,
                     q.section,
@@ -280,8 +293,8 @@ def save_parsed_document(
 
             cursor.executemany(
                 """
-                INSERT INTO questions (
-                    question_id, document_id, page, raw_text,
+                INSERT INTO Question (
+                    question_id, document_id, page, text,
                     year, exam_type, section, marks, is_compulsory,
                     cleaned_text, topic_id, repeat_group_id
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -296,12 +309,12 @@ def save_parsed_document(
 
 
 def get_questions_by_document(document_id: int, db_path: Optional[str] = None) -> List[Dict[str, Any]]:
-    """Retrieve all questions for a specific document_id."""
+    """Retrieve all questions for a specific document id."""
     conn = get_connection(db_path)
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT * FROM questions WHERE document_id = ? ORDER BY page ASC, id ASC",
+            "SELECT * FROM Question WHERE document_id = ? ORDER BY page ASC, id ASC",
             (document_id,),
         )
         return [dict(row) for row in cursor.fetchall()]
@@ -314,7 +327,7 @@ def get_all_questions(db_path: Optional[str] = None) -> List[Dict[str, Any]]:
     conn = get_connection(db_path)
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM questions ORDER BY year DESC, document_id ASC, id ASC")
+        cursor.execute("SELECT * FROM Question ORDER BY year DESC, document_id ASC, id ASC")
         return [dict(row) for row in cursor.fetchall()]
     finally:
         conn.close()
@@ -325,7 +338,7 @@ def get_questions_by_year(year: int, db_path: Optional[str] = None) -> List[Dict
     conn = get_connection(db_path)
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM questions WHERE year = ? ORDER BY id ASC", (year,))
+        cursor.execute("SELECT * FROM Question WHERE year = ? ORDER BY id ASC", (year,))
         return [dict(row) for row in cursor.fetchall()]
     finally:
         conn.close()
@@ -360,7 +373,7 @@ def insert_topics_batch(
 
         cursor.executemany(
             """
-            INSERT INTO topics (topic_code, name, syllabus_unit)
+            INSERT INTO Topic (topic_code, name, syllabus_unit)
             VALUES (?, ?, ?)
             ON CONFLICT(topic_code) DO UPDATE SET
                 name = excluded.name,
@@ -379,7 +392,7 @@ def get_all_topics(db_path: Optional[str] = None) -> List[Dict[str, Any]]:
     conn = get_connection(db_path)
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM topics ORDER BY topic_code ASC")
+        cursor.execute("SELECT * FROM Topic ORDER BY topic_code ASC")
         return [dict(row) for row in cursor.fetchall()]
     finally:
         conn.close()

@@ -61,10 +61,10 @@ def mem_db(monkeypatch):
 
 def test_schema_ddl_list():
     ddl = get_all_ddl()
-    assert len(ddl) >= 4  # documents, topics, questions + indexes
-    assert any("CREATE TABLE IF NOT EXISTS documents" in s for s in ddl)
-    assert any("CREATE TABLE IF NOT EXISTS topics" in s for s in ddl)
-    assert any("CREATE TABLE IF NOT EXISTS questions" in s for s in ddl)
+    assert len(ddl) >= 4  # Document, Topic, Question + indexes
+    assert any("CREATE TABLE IF NOT EXISTS Document" in s for s in ddl)
+    assert any("CREATE TABLE IF NOT EXISTS Topic" in s for s in ddl)
+    assert any("CREATE TABLE IF NOT EXISTS Question" in s for s in ddl)
 
 
 def test_init_db_creates_tables(mem_db):
@@ -72,9 +72,9 @@ def test_init_db_creates_tables(mem_db):
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
     tables = {row["name"] for row in cursor.fetchall()}
-    assert "documents" in tables
-    assert "topics" in tables
-    assert "questions" in tables
+    assert "Document" in tables
+    assert "Topic" in tables
+    assert "Question" in tables
     conn.close()
 
 
@@ -90,7 +90,7 @@ def test_insert_and_get_document(mem_db):
     doc_id = insert_document(
         file_name="DBMS_2025_EndSem.pdf",
         file_path="/path/to/DBMS_2025_EndSem.pdf",
-        total_pages=3,
+        source_pages=3,
         year=2025,
         exam_type="End Semester",
         db_path=mem_db,
@@ -99,9 +99,9 @@ def test_insert_and_get_document(mem_db):
 
     doc = get_document_by_id(doc_id, db_path=mem_db)
     assert doc is not None
-    assert doc["document_id"] == 1
+    assert doc["id"] == 1
     assert doc["file_name"] == "DBMS_2025_EndSem.pdf"
-    assert doc["total_pages"] == 3
+    assert doc["source_pages"] == 3
     assert doc["year"] == 2025
     assert doc["exam_type"] == "End Semester"
 
@@ -112,7 +112,7 @@ def test_get_all_documents(mem_db):
 
     docs = get_all_documents(db_path=mem_db)
     assert len(docs) == 2
-    # Ordered descending by document_id
+    # Ordered descending by id
     assert docs[0]["file_name"] == "doc2.pdf"
     assert docs[1]["file_name"] == "doc1.pdf"
 
@@ -139,7 +139,7 @@ def test_insert_single_question_model(mem_db):
     assert len(qs) == 1
     row = qs[0]
     assert row["question_id"] == q.question_id
-    assert row["raw_text"] == "Explain ACID properties in DBMS."
+    assert row["text"] == "Explain ACID properties in DBMS."  # DB column is `text`
     assert row["marks"] == 5
     assert row["is_compulsory"] == 1
     assert row["cleaned_text"] is None
@@ -182,7 +182,7 @@ def test_save_parsed_document_atomic(mem_db):
 
     doc = get_document_by_id(doc_id, db_path=mem_db)
     assert doc["year"] == 2025
-    assert doc["total_pages"] == 2
+    assert doc["source_pages"] == 2
 
     qs = get_questions_by_document(doc_id, db_path=mem_db)
     assert len(qs) == 2
@@ -263,7 +263,7 @@ def test_foreign_key_cascade_delete(mem_db):
 
     # Delete document
     conn = get_connection(mem_db)
-    conn.execute("DELETE FROM documents WHERE document_id = ?", (doc_id,))
+    conn.execute("DELETE FROM Document WHERE id = ?", (doc_id,))
     conn.commit()
     conn.close()
 
