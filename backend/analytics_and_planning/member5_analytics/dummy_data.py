@@ -76,15 +76,15 @@ def make_dummy_data(seed: int = 42, years=range(2018, 2026)):
         for pos, (tidx, marks) in enumerate(zip(picked, _PAPER_PATTERN)):
             stem_idx = int(rng.choice(2, p=[0.6, 0.4]))
             rows.append({
-                "document_id": f"paper_{year}", "page": 1 if pos < 6 else 2,
+                "document_id": int(year), "page": 1 if pos < 6 else 2,
                 "year": year, "section": _SECTION[marks], "marks": marks,
                 "text": _STEMS[marks][stem_idx].format(t=_TOPICS[tidx][0]),
                 "topic_id": int(tidx) + 1, "_group_key": f"{tidx}-{marks}-{stem_idx}",
             })
     # two questions outside the syllabus
-    rows.append({"document_id": "paper_2019", "page": 2, "year": 2019, "section": "B", "marks": 5,
+    rows.append({"document_id": 2019, "page": 2, "year": 2019, "section": "B", "marks": 5,
                  "text": "Explain the CAP theorem.", "topic_id": None, "_group_key": None})
-    rows.append({"document_id": "paper_2023", "page": 2, "year": 2023, "section": "B", "marks": 5,
+    rows.append({"document_id": 2023, "page": 2, "year": 2023, "section": "B", "marks": 5,
                  "text": "Describe how MapReduce works.", "topic_id": None, "_group_key": None})
 
     q = pd.DataFrame(rows)
@@ -112,10 +112,12 @@ def make_dummy_data(seed: int = 42, years=range(2018, 2026)):
     # lecture_date (per Member 1). Topics are tagged per page (per Member 4's
     # note_topics link table); a multi-topic lecture spreads its topics
     # across its pages round-robin.
+    # document_id is an int (matches models.py's Integer FK); lecture documents
+    # are numbered from 9000 upward so they never collide with paper document_ids (~2018-2025).
     note_rows, note_topic_rows = [], []
     note_id = 1
     for i, (topic_names, n_pages) in enumerate(_LECTURES):
-        doc_id = f"lecture_{i + 1:02d}"
+        doc_id = 9000 + i + 1
         date = (pd.Timestamp("2026-08-03") + pd.Timedelta(days=3 * i)).date().isoformat()
         page_note_ids = []
         for p in range(1, n_pages + 1):

@@ -40,7 +40,7 @@
       "year": 2019,
       "marks": 5,
       "text": "Explain the CAP theorem.",
-      "document_id": "paper_2019",
+      "document_id": 2019,
       "page": 2
     },
     {
@@ -48,7 +48,7 @@
       "year": 2023,
       "marks": 5,
       "text": "Describe how MapReduce works.",
-      "document_id": "paper_2023",
+      "document_id": 2023,
       "page": 2
     }
   ],

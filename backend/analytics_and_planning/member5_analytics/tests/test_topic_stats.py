@@ -82,3 +82,11 @@ def test_legacy_topic_ids_column_still_works_as_fallback():
     notes = pd.DataFrame({"id": [1], "lecture_date": ["2026-01-01"], "topic_ids": ["[1]"]})
     s = compute_topic_stats(topics, questions, notes, note_topics=None, params=P)
     assert row(s, 1).has_notes
+
+
+def test_dummy_data_document_ids_are_integers():
+    """Regression test: document_id must be int to match models.py's
+    Integer FK (Member 4 caught this when seeding the real DB with strings)."""
+    _, questions, notes, _ = make_dummy_data()
+    assert questions["document_id"].apply(lambda v: isinstance(v, (int,))).all()
+    assert notes["document_id"].apply(lambda v: isinstance(v, (int,))).all()

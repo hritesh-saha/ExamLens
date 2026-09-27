@@ -15,7 +15,7 @@ def timeline_data():
                            "syllabus_unit": ["Unit 1", "Unit 1"]})
     notes = pd.DataFrame({
         "id": [1, 2, 3, 4],
-        "document_id": ["L1", "L1", "L2", "L3"],
+        "document_id": [101, 101, 102, 103],
         "page": [1, 2, 1, 1],
         "lecture_date": ["2026-08-10", "2026-08-10", "2026-08-05", None],
     })
@@ -26,7 +26,7 @@ def timeline_data():
 def test_groups_pages_under_one_lecture(timeline_data):
     topics, notes, note_topics = timeline_data
     r = build_lecture_timeline(notes, note_topics, topics)
-    l1 = next(e for e in r["timeline"] if e["document_id"] == "L1")
+    l1 = next(e for e in r["timeline"] if e["document_id"] == 101)
     assert l1["n_pages"] == 2
 
 
@@ -35,7 +35,7 @@ def test_shows_all_topics_not_just_one(timeline_data):
     not just one -- otherwise the others look like false coverage gaps."""
     topics, notes, note_topics = timeline_data
     r = build_lecture_timeline(notes, note_topics, topics)
-    l1 = next(e for e in r["timeline"] if e["document_id"] == "L1")
+    l1 = next(e for e in r["timeline"] if e["document_id"] == 101)
     assert {t["name"] for t in l1["topics"]} == {"Recursion", "Sorting"}
     assert l1["syllabus_units"] == ["Unit 1"]
 
@@ -45,38 +45,38 @@ def test_chronological_order(timeline_data):
     r = build_lecture_timeline(notes, note_topics, topics)
     dates = [e["lecture_date"] for e in r["timeline"]]
     assert dates == sorted(dates)
-    assert [e["document_id"] for e in r["timeline"]] == ["L2", "L1"]   # L2 (Aug 5) before L1 (Aug 10)
+    assert [e["document_id"] for e in r["timeline"]] == [102, 101]   # L2 (Aug 5) before L1 (Aug 10)
 
 
 def test_lecture_with_no_topics_yet_has_empty_list(timeline_data):
     topics, notes, note_topics = timeline_data
     r = build_lecture_timeline(notes, note_topics, topics)
-    l2 = next(e for e in r["timeline"] if e["document_id"] == "L2")
+    l2 = next(e for e in r["timeline"] if e["document_id"] == 102)
     assert l2["topics"] == [] and l2["syllabus_units"] == []
 
 
 def test_null_lecture_date_goes_to_unscheduled_not_timeline(timeline_data):
     topics, notes, note_topics = timeline_data
     r = build_lecture_timeline(notes, note_topics, topics)
-    assert [e["document_id"] for e in r["unscheduled"]] == ["L3"]
-    assert "L3" not in [e["document_id"] for e in r["timeline"]]
+    assert [e["document_id"] for e in r["unscheduled"]] == [103]
+    assert 103 not in [e["document_id"] for e in r["timeline"]]
     assert r["data_quality"]["n_unscheduled"] == 1
 
 
 def test_conflicting_dates_within_one_lecture_are_flagged_and_earliest_wins():
     topics = pd.DataFrame({"id": [1], "name": ["T1"], "syllabus_unit": ["U1"]})
-    notes = pd.DataFrame({"id": [1, 2], "document_id": ["L1", "L1"], "page": [1, 2],
+    notes = pd.DataFrame({"id": [1, 2], "document_id": [201, 201], "page": [1, 2],
                           "lecture_date": ["2026-08-10", "2026-08-05"]})
     r = build_lecture_timeline(notes, None, topics)
     assert r["timeline"][0]["lecture_date"] == "2026-08-05"          # earliest wins
     assert r["data_quality"]["n_date_conflicts"] == 1
-    assert r["data_quality"]["date_conflicts"][0]["document_id"] == "L1"
+    assert r["data_quality"]["date_conflicts"][0]["document_id"] == 201
 
 
 def test_works_with_no_note_topics_link_table_at_all():
     """note_topics=None shouldn't crash -- e.g. before Member 4's classifier has run."""
     topics = pd.DataFrame({"id": [1], "name": ["T1"], "syllabus_unit": ["U1"]})
-    notes = pd.DataFrame({"id": [1], "document_id": ["L1"], "page": [1], "lecture_date": ["2026-08-10"]})
+    notes = pd.DataFrame({"id": [1], "document_id": [301], "page": [1], "lecture_date": ["2026-08-10"]})
     r = build_lecture_timeline(notes, None, topics)
     assert r["timeline"][0]["topics"] == []
 
