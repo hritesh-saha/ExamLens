@@ -37,7 +37,7 @@ class RepeatDetector:
                     continue
                 
                 print(f"Processing Topic ID {topic_id} with {n} questions...")
-                q_texts = [q.cleaned_text or q.raw_text for q in questions]
+                q_texts = [q.cleaned_text or q.text for q in questions]
                 embeddings = self.model.encode(q_texts, convert_to_tensor=True)
                 
                 # Compute pairwise cosine similarity matrix

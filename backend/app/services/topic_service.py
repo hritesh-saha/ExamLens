@@ -45,8 +45,8 @@ class TopicAssigner:
 
             print(f"Processing {len(unassigned_questions)} unassigned questions...")
             
-            # Batch encode question texts (fallback to raw_text if cleaned_text is unavailable)
-            q_texts = [q.cleaned_text or q.raw_text for q in unassigned_questions]
+            # Batch encode question texts (fallback to text if cleaned_text is unavailable)
+            q_texts = [q.cleaned_text or q.text for q in unassigned_questions]
             q_embeddings = self.model.encode(q_texts, convert_to_tensor=True)
 
             # Compute dot product/cosine similarity matrix

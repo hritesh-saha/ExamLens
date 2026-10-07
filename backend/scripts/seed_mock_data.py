@@ -38,7 +38,8 @@ def seed_data():
         with open(questions_path, "r") as f:
             questions_data = json.load(f)
             for item in questions_data:
-                existing_q = session.query(Question).filter_by(raw_text=item["raw_text"]).first()
+                # Reverted raw_text to text for the ORM model attribute
+                existing_q = session.query(Question).filter_by(text=item["raw_text"]).first()
                 if not existing_q:
                     q = Question(
                         document_id=item["document_id"],
@@ -48,7 +49,7 @@ def seed_data():
                         section=item["section"],
                         marks=item["marks"],
                         is_compulsory=item["is_compulsory"],
-                        raw_text=item["raw_text"],
+                        text=item["raw_text"], # Reverted kwarg
                         cleaned_text=item["raw_text"],
                         topic_id=None,
                         repeat_group_id=None

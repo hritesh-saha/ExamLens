@@ -33,7 +33,7 @@ class NoteStructurer:
         with Session(engine) as session:
             # Query notes that have OCR text but no structured content yet
             unstructured_notes = session.query(Note).filter(
-                Note.raw_text != None,
+                Note.text != None,
                 Note.structured_content == None
             ).all()
             
@@ -47,13 +47,13 @@ class NoteStructurer:
             for note in unstructured_notes:
                 try:
                     response = self.model.generate_content(
-                        note.raw_text,
+                        note.text,
                         generation_config=genai.types.GenerationConfig(
                             temperature=0.1,
                         )
                     )
                     
-                    # Write to the new column, preserving Member 2's raw_text
+                    # Write to the new column, preserving Member 2's raw text
                     note.structured_content = response.text
                     updates += 1
                     print(f"  [Success] Structured Note ID: {note.id}")
