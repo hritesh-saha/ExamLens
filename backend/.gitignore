@@ -1,5 +1,7 @@
 *.pdf
 bootstrap.txt
+__pycache__/
+*.pyc
 
 
 

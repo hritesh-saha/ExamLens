@@ -1,0 +1,131 @@
+{
+  "with_due_score": {
+    "years_tested": [
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "top_k": 5,
+    "mean_top_k_marks_captured_pct": 33.6,
+    "mean_priority_vs_actual_marks_spearman": 0.294,
+    "per_year": [
+      {
+        "held_out_year": 2020,
+        "n_prior_years": 2,
+        "top_k": 5,
+        "top_k_marks_captured_pct": 34.0,
+        "priority_vs_actual_marks_spearman": 0.333,
+        "total_held_out_marks": 50.0
+      },
+      {
+        "held_out_year": 2021,
+        "n_prior_years": 3,
+        "top_k": 5,
+        "top_k_marks_captured_pct": 37.8,
+        "priority_vs_actual_marks_spearman": 0.225,
+        "total_held_out_marks": 45.0
+      },
+      {
+        "held_out_year": 2022,
+        "n_prior_years": 4,
+        "top_k": 5,
+        "top_k_marks_captured_pct": 24.0,
+        "priority_vs_actual_marks_spearman": 0.439,
+        "total_held_out_marks": 50.0
+      },
+      {
+        "held_out_year": 2023,
+        "n_prior_years": 5,
+        "top_k": 5,
+        "top_k_marks_captured_pct": 18.0,
+        "priority_vs_actual_marks_spearman": 0.216,
+        "total_held_out_marks": 50.0
+      },
+      {
+        "held_out_year": 2024,
+        "n_prior_years": 6,
+        "top_k": 5,
+        "top_k_marks_captured_pct": 60.0,
+        "priority_vs_actual_marks_spearman": 0.292,
+        "total_held_out_marks": 50.0
+      },
+      {
+        "held_out_year": 2025,
+        "n_prior_years": 7,
+        "top_k": 5,
+        "top_k_marks_captured_pct": 28.0,
+        "priority_vs_actual_marks_spearman": 0.262,
+        "total_held_out_marks": 50.0
+      }
+    ]
+  },
+  "without_due_score": {
+    "years_tested": [
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "top_k": 5,
+    "mean_top_k_marks_captured_pct": 33.6,
+    "mean_priority_vs_actual_marks_spearman": 0.307,
+    "per_year": [
+      {
+        "held_out_year": 2020,
+        "n_prior_years": 2,
+        "top_k": 5,
+        "top_k_marks_captured_pct": 34.0,
+        "priority_vs_actual_marks_spearman": 0.359,
+        "total_held_out_marks": 50.0
+      },
+      {
+        "held_out_year": 2021,
+        "n_prior_years": 3,
+        "top_k": 5,
+        "top_k_marks_captured_pct": 37.8,
+        "priority_vs_actual_marks_spearman": 0.237,
+        "total_held_out_marks": 45.0
+      },
+      {
+        "held_out_year": 2022,
+        "n_prior_years": 4,
+        "top_k": 5,
+        "top_k_marks_captured_pct": 24.0,
+        "priority_vs_actual_marks_spearman": 0.456,
+        "total_held_out_marks": 50.0
+      },
+      {
+        "held_out_year": 2023,
+        "n_prior_years": 5,
+        "top_k": 5,
+        "top_k_marks_captured_pct": 18.0,
+        "priority_vs_actual_marks_spearman": 0.204,
+        "total_held_out_marks": 50.0
+      },
+      {
+        "held_out_year": 2024,
+        "n_prior_years": 6,
+        "top_k": 5,
+        "top_k_marks_captured_pct": 60.0,
+        "priority_vs_actual_marks_spearman": 0.292,
+        "total_held_out_marks": 50.0
+      },
+      {
+        "held_out_year": 2025,
+        "n_prior_years": 7,
+        "top_k": 5,
+        "top_k_marks_captured_pct": 28.0,
+        "priority_vs_actual_marks_spearman": 0.296,
+        "total_held_out_marks": 50.0
+      }
+    ]
+  },
+  "top_k_marks_captured_pct_delta": 0.0,
+  "spearman_delta": -0.013,
+  "verdict": "The due-score boost makes little difference either way on this data."
+}

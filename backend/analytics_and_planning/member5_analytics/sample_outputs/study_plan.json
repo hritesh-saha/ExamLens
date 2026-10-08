@@ -1,0 +1,184 @@
+{
+  "inputs": {
+    "days_left": 7,
+    "hours_per_day": 3,
+    "total_hours": 21
+  },
+  "days": [
+    {
+      "day": 1,
+      "hours_used": 3.0,
+      "blocks": [
+        {
+          "topic_id": 14,
+          "topic": "BFS and DFS",
+          "syllabus_unit": "Unit 4: Graphs",
+          "hours": 2.0,
+          "needs_notes": false,
+          "priority": 2.549
+        },
+        {
+          "topic_id": 3,
+          "topic": "Sorting Algorithms",
+          "syllabus_unit": "Unit 1: Fundamentals",
+          "hours": 1.0,
+          "needs_notes": false,
+          "priority": 2.477
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "hours_used": 3.0,
+      "blocks": [
+        {
+          "topic_id": 3,
+          "topic": "Sorting Algorithms",
+          "syllabus_unit": "Unit 1: Fundamentals",
+          "hours": 1.0,
+          "needs_notes": false,
+          "priority": 2.477
+        },
+        {
+          "topic_id": 5,
+          "topic": "Linked Lists",
+          "syllabus_unit": "Unit 2: Linear Structures",
+          "hours": 2.0,
+          "needs_notes": false,
+          "priority": 2.393
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "hours_used": 3.0,
+      "blocks": [
+        {
+          "topic_id": 11,
+          "topic": "AVL Trees",
+          "syllabus_unit": "Unit 3: Trees",
+          "hours": 2.5,
+          "needs_notes": true,
+          "priority": 2.308
+        },
+        {
+          "topic_id": 6,
+          "topic": "Stacks",
+          "syllabus_unit": "Unit 2: Linear Structures",
+          "hours": 0.5,
+          "needs_notes": false,
+          "priority": 2.012
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "hours_used": 3.0,
+      "blocks": [
+        {
+          "topic_id": 6,
+          "topic": "Stacks",
+          "syllabus_unit": "Unit 2: Linear Structures",
+          "hours": 1.5,
+          "needs_notes": false,
+          "priority": 2.012
+        },
+        {
+          "topic_id": 9,
+          "topic": "Binary Trees and Traversals",
+          "syllabus_unit": "Unit 3: Trees",
+          "hours": 1.5,
+          "needs_notes": false,
+          "priority": 1.934
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "hours_used": 3.0,
+      "blocks": [
+        {
+          "topic_id": 9,
+          "topic": "Binary Trees and Traversals",
+          "syllabus_unit": "Unit 3: Trees",
+          "hours": 0.5,
+          "needs_notes": false,
+          "priority": 1.934
+        },
+        {
+          "topic_id": 7,
+          "topic": "Queues",
+          "syllabus_unit": "Unit 2: Linear Structures",
+          "hours": 2.0,
+          "needs_notes": false,
+          "priority": 1.482
+        },
+        {
+          "topic_id": 17,
+          "topic": "Dynamic Programming",
+          "syllabus_unit": "Unit 5: Advanced",
+          "hours": 0.5,
+          "needs_notes": true,
+          "priority": 1.369
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "hours_used": 3.0,
+      "blocks": [
+        {
+          "topic_id": 17,
+          "topic": "Dynamic Programming",
+          "syllabus_unit": "Unit 5: Advanced",
+          "hours": 2.0,
+          "needs_notes": true,
+          "priority": 1.369
+        },
+        {
+          "topic_id": 15,
+          "topic": "Shortest Path",
+          "syllabus_unit": "Unit 4: Graphs",
+          "hours": 1.0,
+          "needs_notes": true,
+          "priority": 1.365
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "hours_used": 1.5,
+      "blocks": [
+        {
+          "topic_id": 15,
+          "topic": "Shortest Path",
+          "syllabus_unit": "Unit 4: Graphs",
+          "hours": 1.5,
+          "needs_notes": true,
+          "priority": 1.365
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "topics_planned": 9,
+    "hours_planned": 19.5,
+    "hours_unused": 1.5,
+    "expected_marks_covered_pct": 70.9,
+    "topics_needing_notes": [
+      "AVL Trees",
+      "Dynamic Programming",
+      "Shortest Path"
+    ],
+    "topics_not_scheduled": [
+      "Arrays and Complexity Analysis",
+      "Minimum Spanning Tree",
+      "Searching Algorithms",
+      "Hashing",
+      "Binary Search Trees",
+      "Heaps",
+      "Graph Representation",
+      "Recursion"
+    ]
+  }
+}
