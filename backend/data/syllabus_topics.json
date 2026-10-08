@@ -1,0 +1,22 @@
+[
+  {
+    "topic_code": "DBMS-01",
+    "name": "Relational Model & Normalization",
+    "syllabus_unit": "Unit 1: Database System Concepts"
+  },
+  {
+    "topic_code": "DBMS-02",
+    "name": "Transactions & ACID Properties",
+    "syllabus_unit": "Unit 2: Transaction Management"
+  },
+  {
+    "topic_code": "DBMS-03",
+    "name": "Concurrency Control & Locking",
+    "syllabus_unit": "Unit 2: Transaction Management"
+  },
+  {
+    "topic_code": "DBMS-04",
+    "name": "Indexing & B+ Trees",
+    "syllabus_unit": "Unit 3: Storage and Indexing"
+  }
+]
