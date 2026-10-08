@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import Document
 from app.routers.documents import get_shared_contract_payload
+from app.vision.pipeline import process_board_images
 
 # Teammate function placeholders
 # from teammates.member1_vision import process_board_images
@@ -27,11 +28,10 @@ def trigger_processing_pipeline(document_id: int, db: Session = Depends(get_db))
     try:
         # 2. Route based on document type
         if doc.type == "lecture_board":
-            # cleaned_pages = process_board_images(shared_contract)
+            cleaned_pages = process_board_images(shared_contract)
             # ocr_results = run_ocr_and_math(cleaned_pages)
             # structured_notes = assign_topics_and_structure(ocr_results)
             # db.bulk_insert_mappings(Note, structured_notes)
-            pass
         elif doc.type == "question_paper":
             # questions_data = parse_exam_paper(shared_contract)
             # tagged_questions = assign_topics_and_structure(questions_data)
