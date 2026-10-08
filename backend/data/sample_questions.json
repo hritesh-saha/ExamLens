@@ -1,0 +1,32 @@
+[
+  {
+    "document_id": 1,
+    "page": 1,
+    "year": 2022,
+    "exam_type": "endsem",
+    "section": "A",
+    "marks": 5,
+    "is_compulsory": true,
+    "raw_text": "Explain the ACID properties of a database transaction with a suitable example."
+  },
+  {
+    "document_id": 1,
+    "page": 1,
+    "year": 2023,
+    "exam_type": "endsem",
+    "section": "B",
+    "marks": 5,
+    "is_compulsory": false,
+    "raw_text": "What are atomicity and durability in DBMS transactions? Illustrate with an example."
+  },
+  {
+    "document_id": 1,
+    "page": 2,
+    "year": 2022,
+    "exam_type": "midsem",
+    "section": "A",
+    "marks": 10,
+    "is_compulsory": false,
+    "raw_text": "Define 3NF and BCNF. Explain functional dependencies with examples."
+  }
+]
