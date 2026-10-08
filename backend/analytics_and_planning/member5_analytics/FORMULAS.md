@@ -83,7 +83,37 @@ One entry per lecture, sorted chronologically, showing every topic it covers.
 - If a lecture's pages disagree on `lecture_date` (shouldn't happen per Member 1's design, but data can be messy), the earliest date is used and the conflict is reported in `data_quality.date_conflicts` so it's visible, not silently picked.
 - A lecture with no topics tagged yet (classification hasn't run) shows an empty topic list rather than erroring.
 
-## 6. Confirmed with teammates (Week 1 answers)
+## 6. Practice set generator (`practice_set.py`)
+
+Builds a mock paper from real past questions, weighted toward likely topics, with a marks distribution matching history.
+
+**Marks distribution:** for each marks value (2, 5, 10, ...), count how many questions of that value a typical past paper has (median across all papers), round to the nearest whole question. A paper that's historically had two 10-mark, four 5-mark and five 2-mark questions gets a practice set shaped the same way.
+
+**Topic selection:** weighted by the same `priority` score as the study planner (expected marks x due-score boost) -- with one deliberate difference: **the practice set is built with an empty notes table**, so note-availability never influences which topics get tested. The planner *should* favour topics without notes (that's its job: tell the student what to study); a mock exam should not -- whether the student has notes for a topic has nothing to do with whether it's likely to appear on the real exam.
+
+**Only real questions, never generated text:** every question in the output is pulled verbatim from the `Question` table, per the project brief. If a marks value has no real question left for any topic (exhausted or genuinely absent), that slot is either filled by reusing an already-used question (flagged `reused_question: true`) or, if there are no questions at all for that marks value, left out and reported in `unfilled_slots` rather than invented.
+
+**Reproducibility:** pass `seed=<int>` for a deterministic paper (useful for tests or "regenerate the same paper"); omit it for a fresh random draw each call.
+
+Each question in the output also carries its `answer_length_hint` (section 4), so the generated paper is ready to hand to the student with suggested word counts attached, as the demo flow in the project brief describes.
+
+## 7. Back-test (`backtest.py`)
+
+This is the evidence for or against the "due score" heuristic from section 1 -- the part of your report/viva that says "we didn't just assume this heuristic works, we checked."
+
+**Method: leave-one-year-out.** For each exam year Y with enough prior years of data, compute topic priority using *only* data from before Y (exactly as if Y hadn't happened yet), then check it against what was *actually* asked in Y. Two metrics per year:
+- **`top_k_marks_captured_pct`** -- of all marks actually awarded in year Y, what share came from the topics the model would have told you (before Y) to prioritise? This is the number that answers "would following the planner's advice have paid off."
+- **`priority_vs_actual_marks_spearman`** -- rank correlation between predicted priority and actual marks earned, across *all* topics, not just the top ones. Catches whether the whole ranking is sensible, not just the top slice.
+
+**The actual test:** `compare_due_score_contribution` runs this twice -- once with the configured `due_weight`, once with `due_weight=0` (plain marks-per-hour ranking, no "overdue" boost) -- and reports the difference plainly:
+
+| On dummy data | with due-score | without due-score |
+|---|---|---|
+| top-5 captures | 33.6% of marks | 33.6% of marks |
+
+**Honest result on dummy data: no measurable difference.** This isn't a bug -- the dummy data generator draws topics independently each year with fixed probabilities, so there's no genuine "topic X is overdue" signal built into it for the heuristic to find. **This is expected and says nothing about whether the heuristic will help on real exam data**, where topics may genuinely cycle. Re-run `compare_due_score_contribution` once real past papers are loaded -- that result is the one to report. If it still shows no improvement there, FORMULAS.md's original guidance holds: report that honestly rather than keep the complexity. If it does help, you now have the number to defend it with.
+
+## 8. Confirmed with teammates (Week 1 answers)
 
 | With | Answer | What changed in the code |
 |---|---|---|
@@ -95,9 +125,12 @@ One entry per lecture, sorted chronologically, showing every topic it covers.
 
 Earlier the written schema draft listed `topic_ids` as a column on `Note`, which conflicted with Member 4's plan for a link table. Checked against Member 6's actual repo (`app/models.py`): `Note` has no `topic_ids` column, and there's a proper `NoteTopic(note_id, topic_id)` link table. No action needed — this matches what the code below is built against.
 
-## 7. Open items for Week 2/3
+## 9. Open items
 
-- ~~Answer-length hints~~ — done (section 4)
-- ~~Lecture timeline~~ — done (section 5)
-- Practice set generator (sampling that matches the historical marks distribution)
-- Back-test: hide the latest paper, run the model on earlier years, check whether high-priority topics actually appeared (this is how you defend the due-score heuristic)
+All planned Member 5 features are built: per-topic stats, coverage gaps, study planner,
+answer-length hints, lecture timeline, practice set generator, and the back-test.
+
+What's left is data-dependent, not code-dependent:
+- Re-run `compare_due_score_contribution` once real past-paper data is loaded (section 7) --
+  the dummy-data result above is a placeholder, not the real answer.
+- Re-check `sample_outputs/` against the real schema once Members 1/2/3/4's pipelines are live.

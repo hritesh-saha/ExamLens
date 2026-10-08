@@ -1,0 +1,144 @@
+{
+  "questions": [
+    {
+      "question_id": 63,
+      "marks": 2,
+      "topic_id": 14,
+      "topic_name": "BFS and DFS",
+      "text": "State two applications of BFS and DFS.",
+      "year_asked": 2023,
+      "reused_question": false,
+      "suggested_words": 50,
+      "suggested_minutes": 4
+    },
+    {
+      "question_id": 85,
+      "marks": 2,
+      "topic_id": 13,
+      "topic_name": "Graph Representation",
+      "text": "Define Graph Representation.",
+      "year_asked": 2025,
+      "reused_question": false,
+      "suggested_words": 50,
+      "suggested_minutes": 4
+    },
+    {
+      "question_id": 32,
+      "marks": 2,
+      "topic_id": 15,
+      "topic_name": "Shortest Path",
+      "text": "Define Shortest Path.",
+      "year_asked": 2020,
+      "reused_question": false,
+      "suggested_words": 50,
+      "suggested_minutes": 4
+    },
+    {
+      "question_id": 86,
+      "marks": 2,
+      "topic_id": 5,
+      "topic_name": "Linked Lists",
+      "text": "State two applications of Linked Lists.",
+      "year_asked": 2025,
+      "reused_question": false,
+      "suggested_words": 50,
+      "suggested_minutes": 4
+    },
+    {
+      "question_id": 30,
+      "marks": 2,
+      "topic_id": 3,
+      "topic_name": "Sorting Algorithms",
+      "text": "State two applications of Sorting Algorithms.",
+      "year_asked": 2020,
+      "reused_question": false,
+      "suggested_words": 50,
+      "suggested_minutes": 4
+    },
+    {
+      "question_id": 71,
+      "marks": 5,
+      "topic_id": 3,
+      "topic_name": "Sorting Algorithms",
+      "text": "Compare two approaches to Sorting Algorithms.",
+      "year_asked": 2024,
+      "reused_question": false,
+      "suggested_words": 150,
+      "suggested_minutes": 12
+    },
+    {
+      "question_id": 69,
+      "marks": 5,
+      "topic_id": 13,
+      "topic_name": "Graph Representation",
+      "text": "Explain Graph Representation with a suitable example.",
+      "year_asked": 2024,
+      "reused_question": false,
+      "suggested_words": 150,
+      "suggested_minutes": 12
+    },
+    {
+      "question_id": 80,
+      "marks": 5,
+      "topic_id": 6,
+      "topic_name": "Stacks",
+      "text": "Explain Stacks with a suitable example.",
+      "year_asked": 2025,
+      "reused_question": false,
+      "suggested_words": 150,
+      "suggested_minutes": 12
+    },
+    {
+      "question_id": 28,
+      "marks": 5,
+      "topic_id": 8,
+      "topic_name": "Hashing",
+      "text": "Explain Hashing with a suitable example.",
+      "year_asked": 2020,
+      "reused_question": false,
+      "suggested_words": 150,
+      "suggested_minutes": 12
+    },
+    {
+      "question_id": 35,
+      "marks": 10,
+      "topic_id": 11,
+      "topic_name": "AVL Trees",
+      "text": "Discuss AVL Trees in detail with algorithms and diagrams.",
+      "year_asked": 2021,
+      "reused_question": false,
+      "suggested_words": 300,
+      "suggested_minutes": 25
+    },
+    {
+      "question_id": 23,
+      "marks": 10,
+      "topic_id": 4,
+      "topic_name": "Searching Algorithms",
+      "text": "Discuss Searching Algorithms in detail with algorithms and diagrams.",
+      "year_asked": 2020,
+      "reused_question": false,
+      "suggested_words": 300,
+      "suggested_minutes": 25
+    }
+  ],
+  "summary": {
+    "n_questions": 11,
+    "total_marks": 50,
+    "typical_paper_marks": 50.0,
+    "n_reused_questions": 0,
+    "n_unfilled_slots": 0,
+    "unfilled_slots": [],
+    "topics_covered": [
+      "AVL Trees",
+      "BFS and DFS",
+      "Graph Representation",
+      "Hashing",
+      "Linked Lists",
+      "Searching Algorithms",
+      "Shortest Path",
+      "Sorting Algorithms",
+      "Stacks"
+    ]
+  }
+}

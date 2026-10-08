@@ -3,7 +3,8 @@ Prints a readable summary and writes sample JSON outputs for Member 6 (frontend 
 import json
 from pathlib import Path
 
-from . import compute_topic_stats, coverage_report, plan_from_tables, add_answer_length_hints, build_lecture_timeline
+from . import (compute_topic_stats, coverage_report, plan_from_tables, add_answer_length_hints,
+               build_lecture_timeline, generate_practice_set, compare_due_score_contribution)
 from .dummy_data import make_dummy_data
 
 OUT = Path(__file__).parent / "sample_outputs"
@@ -22,6 +23,12 @@ def main():
 
     timeline = build_lecture_timeline(notes, note_topics, topics)
     (OUT / "lecture_timeline.json").write_text(json.dumps(timeline, indent=2))
+
+    practice = generate_practice_set(topics, questions, seed=42)
+    (OUT / "practice_set.json").write_text(json.dumps(practice, indent=2))
+
+    backtest = compare_due_score_contribution(topics, questions, top_k=5)
+    (OUT / "backtest.json").write_text(json.dumps(backtest, indent=2))
 
     (OUT / "coverage_report.json").write_text(json.dumps(report, indent=2))
     (OUT / "study_plan.json").write_text(json.dumps(plan, indent=2))
@@ -42,6 +49,13 @@ def main():
     for e in timeline["timeline"]:
         print(f"  {e['lecture_date']}  {e['document_id']} ({e['n_pages']}p) -> "
               f"{[t['name'] for t in e['topics']]}")
+    print(f"\nPRACTICE SET: {practice['summary']['n_questions']} questions, "
+          f"{practice['summary']['total_marks']} marks (typical paper: {practice['summary']['typical_paper_marks']})")
+    for q in practice["questions"][:5]:
+        print(f"  [{q['marks']}m] {q['topic_name']}: {q['text'][:55]}")
+    print(f"\nBACK-TEST (due-score heuristic): {backtest['verdict']}")
+    print(f"  with due-score:    top-5 captures {backtest['with_due_score']['mean_top_k_marks_captured_pct']}% of marks on average")
+    print(f"  without due-score: top-5 captures {backtest['without_due_score']['mean_top_k_marks_captured_pct']}% of marks on average")
 
 
 if __name__ == "__main__":
