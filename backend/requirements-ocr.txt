@@ -1,0 +1,6 @@
+# Member 2: OCR + Math. Install on top of requirements.txt
+# Tesseract binary is also needed (Windows: UB-Mannheim installer, Linux: apt install tesseract-ocr)
+pytesseract==0.3.13
+matplotlib>=3.8          # LaTeX render validation + preview PNGs
+easyocr>=1.7             # optional, better on handwriting; set OCR_ENGINE=easyocr
+pix2tex>=0.1.2           # equation -> LaTeX (pulls torch; first run downloads weights)
