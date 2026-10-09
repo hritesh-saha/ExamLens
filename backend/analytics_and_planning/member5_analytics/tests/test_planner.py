@@ -2,8 +2,8 @@ import json
 
 import pytest
 
-from examlens_analytics import build_study_plan, compute_topic_stats, plan_from_tables
-from examlens_analytics.dummy_data import make_dummy_data
+from .. import build_study_plan, compute_topic_stats, plan_from_tables
+from ..dummy_data import make_dummy_data
 from .conftest import P
 
 

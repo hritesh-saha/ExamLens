@@ -3,8 +3,8 @@ import json
 import pandas as pd
 import pytest
 
-from examlens_analytics import backtest_single_year, run_backtest, compare_due_score_contribution
-from examlens_analytics.dummy_data import make_dummy_data
+from .. import backtest_single_year, run_backtest, compare_due_score_contribution
+from ..dummy_data import make_dummy_data
 from .conftest import P
 
 
@@ -73,7 +73,7 @@ def test_compare_due_score_without_due_actually_uses_due_weight_zero():
     that particular reshuffle doesn't happen to move the top-5 capture % every year)."""
     from dataclasses import replace
     import pandas as pd
-    from examlens_analytics import compute_topic_stats, DEFAULT_PARAMS
+    from .. import compute_topic_stats, DEFAULT_PARAMS
     topics, questions, notes, note_topics = make_dummy_data()
     empty_notes = pd.DataFrame(columns=["id", "lecture_date"])
     with_due = compute_topic_stats(topics, questions, empty_notes, None, DEFAULT_PARAMS, ref_year=2024)

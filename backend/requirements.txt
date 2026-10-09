@@ -2,7 +2,7 @@
 # ExamLens — Member 3 (Exam Parser) Dependencies
 # Python 3.11+ required
 # ─────────────────────────────────────────────
-
+pandas>=2.0
 # PDF text extraction (text-layer PDFs)
 pdfplumber==0.11.4
 

@@ -1,8 +1,8 @@
 import pytest
 
-from examlens_analytics import compute_topic_stats
-from examlens_analytics.dummy_data import make_dummy_data
-from examlens_analytics.utils import data_quality_report
+from .. import compute_topic_stats
+from ..dummy_data import make_dummy_data
+from ..utils import data_quality_report
 from .conftest import P
 
 

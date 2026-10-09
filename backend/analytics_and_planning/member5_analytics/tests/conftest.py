@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from examlens_analytics.config import Params
+from ..config import Params
 
 # No recency decay + round numbers so every expected value can be checked by hand.
 P = Params(base_effort_hours=2.0, no_notes_penalty=1.25, recency_half_life_years=None,

@@ -74,8 +74,8 @@ app.include_router(exam_router)
 # app.include_router(nlp_router)
 
 # Member 5 — Analytics
-# from app.routers.analytics import router as analytics_router
-# app.include_router(analytics_router)
+from app.routers.analytics import router as analytics_router
+app.include_router(analytics_router)
 
 # Member 6 — Frontend ingestion / auth
 # from app.routers.ingestion import router as ingestion_router

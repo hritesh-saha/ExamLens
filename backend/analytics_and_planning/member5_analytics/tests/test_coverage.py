@@ -1,5 +1,5 @@
-from examlens_analytics import coverage_report
-from examlens_analytics.dummy_data import make_dummy_data
+from .. import coverage_report
+from ..dummy_data import make_dummy_data
 from .conftest import P
 
 

@@ -3,8 +3,8 @@ import json
 import pandas as pd
 import pytest
 
-from examlens_analytics import generate_practice_set, infer_marks_pattern
-from examlens_analytics.dummy_data import make_dummy_data
+from .. import generate_practice_set, infer_marks_pattern
+from ..dummy_data import make_dummy_data
 from .conftest import P
 
 
@@ -59,7 +59,7 @@ def test_unfilled_slot_when_marks_value_has_no_real_question():
         "id": [1, 2], "year": [2023, 2024], "marks": [5, 7], "text": ["q1", "q2"], "topic_id": [1, 1],
     })
     # force a pattern asking for an 8-mark question that never exists at all
-    import examlens_analytics.practice_set as ps
+    from .. import practice_set as ps
     r = generate_practice_set(topics, questions, seed=1)
     # both 5 and 7 mark questions exist exactly once each -> no unfilled slots here
     assert r["summary"]["n_unfilled_slots"] == 0

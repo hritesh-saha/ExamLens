@@ -3,8 +3,8 @@ import json
 import pandas as pd
 import pytest
 
-from examlens_analytics import build_lecture_timeline
-from examlens_analytics.dummy_data import make_dummy_data
+from .. import build_lecture_timeline
+from ..dummy_data import make_dummy_data
 
 
 @pytest.fixture

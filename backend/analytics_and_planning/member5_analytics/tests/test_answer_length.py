@@ -3,8 +3,8 @@ import math
 import pandas as pd
 import pytest
 
-from examlens_analytics import add_answer_length_hints, answer_length_hint
-from examlens_analytics.dummy_data import make_dummy_data
+from .. import add_answer_length_hints, answer_length_hint
+from ..dummy_data import make_dummy_data
 from .conftest import P
 
 
