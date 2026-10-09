@@ -53,6 +53,9 @@ def _easyocr_reader():
 
 def _tesseract_words(img: np.ndarray) -> list[tuple[str, float, int, int, int, int, int]]:
     import pytesseract
+    from app.ocr.tesseract_runtime import configure_tesseract
+
+    configure_tesseract()
     d = pytesseract.image_to_data(
         img, config="--oem 3 --psm 6", output_type=pytesseract.Output.DICT
     )

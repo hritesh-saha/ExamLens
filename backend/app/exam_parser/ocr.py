@@ -50,23 +50,10 @@ from typing import Optional
 import pymupdf      # renders PDF pages to images
 import pytesseract  # calls Tesseract binary
 from PIL import Image
-from dotenv import load_dotenv
+from app.env_loader import load_backend_env
+from app.ocr.tesseract_runtime import configure_tesseract, is_tesseract_available
 
-# ── Load .env robustly ─────────────────────────────────────────────────────────
-# Walk up from this file's location until we find a .env file.
-# This works regardless of where the script is called from.
-def _find_and_load_dotenv() -> None:
-    current = os.path.dirname(os.path.abspath(__file__))
-    for _ in range(6):   # search up to 6 levels up
-        candidate = os.path.join(current, ".env")
-        if os.path.exists(candidate):
-            load_dotenv(candidate)
-            return
-        current = os.path.dirname(current)
-    # If not found, load_dotenv() with no args tries CWD — last resort
-    load_dotenv()
-
-_find_and_load_dotenv()
+load_backend_env()
 
 # ── Logger ─────────────────────────────────────────────────────────────────────
 logger = logging.getLogger(__name__)
@@ -75,27 +62,14 @@ logger = logging.getLogger(__name__)
 # ── Tesseract configuration ────────────────────────────────────────────────────
 
 def _configure_tesseract() -> None:
-    """
-    Tell pytesseract where the Tesseract binary lives.
-
-    Why do this at runtime instead of hardcoding?
-    - Different machines have different install paths
-    - The path is stored in .env so it's easy to change per developer
-    - If TESSERACT_PATH is not set, we fall back to system PATH
-
-    This function is called once when the module loads.
-    """
-    tess_path = os.getenv("TESSERACT_PATH", "")
-    if tess_path and os.path.exists(tess_path):
-        pytesseract.pytesseract.tesseract_cmd = tess_path
-        logger.debug(f"Tesseract path set to: {tess_path}")
+    """Tell pytesseract where the Tesseract binary lives (TESSERACT_PATH or PATH)."""
+    resolved = configure_tesseract()
+    if resolved:
+        logger.debug(f"Tesseract path set to: {resolved}")
     else:
-        # Trust the system PATH — works if Tesseract was added to PATH
-        # during installation or on Linux/Mac
         logger.debug("TESSERACT_PATH not set, using system PATH")
 
 
-# Call it immediately when this module is imported
 _configure_tesseract()
 
 
@@ -342,6 +316,7 @@ def _run_tesseract(image: Image.Image, page_number: int) -> str:
       Cleaning is normalizer.py's job.
     """
     try:
+        configure_tesseract()
         raw_text = pytesseract.image_to_string(
             image,
             lang="eng",
@@ -372,15 +347,4 @@ def _run_tesseract(image: Image.Image, page_number: int) -> str:
 
 # ── Utility: check Tesseract is reachable ─────────────────────────────────────
 
-def is_tesseract_available() -> bool:
-    """
-    Check whether Tesseract is installed and reachable.
-
-    Returns True/False without raising any exceptions.
-    Called by the health-check endpoint and check_env.py.
-    """
-    try:
-        pytesseract.get_tesseract_version()
-        return True
-    except Exception:
-        return False
+# is_tesseract_available is imported from app.ocr.tesseract_runtime above.
