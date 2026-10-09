@@ -11,6 +11,7 @@ import fitz  # PyMuPDF
 import pytest
 from fastapi.testclient import TestClient
 
+from app.database import dispose_engines
 from app.database.db import init_db
 from app.main import app
 
@@ -23,6 +24,7 @@ def isolated_db(monkeypatch):
     monkeypatch.setenv("DATABASE_PATH", db_path)
     init_db(db_path)
     yield db_path
+    dispose_engines()
     if os.path.exists(db_path):
         os.remove(db_path)
 

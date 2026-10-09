@@ -22,23 +22,47 @@ import os
 from pathlib import Path
 
 from sqlalchemy import create_engine
+from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.pool import NullPool
 
 # ── Database path (same file as raw sqlite3 layer uses) ───────────────────────
-_DB_PATH = os.environ.get(
-    "DATABASE_PATH",
-    str(Path(__file__).resolve().parent.parent.parent / "examlens.db")
-)
-SQLALCHEMY_DATABASE_URL = f"sqlite:///{_DB_PATH}"
+_FALLBACK_DB_PATH = str(Path(__file__).resolve().parent.parent.parent / "examlens.db")
+_engine_cache: dict[str, Engine] = {}
 
-# ── SQLAlchemy engine & session (for Member 5 / ORM users) ───────────────────
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False},  # required for SQLite
-)
 
+def _configured_db_path() -> str:
+    return os.environ.get("DATABASE_PATH", _FALLBACK_DB_PATH)
+
+
+def get_engine() -> Engine:
+    """SQLAlchemy engine for the currently configured DATABASE_PATH."""
+    path = _configured_db_path()
+    cached = _engine_cache.get(path)
+    if cached is None:
+        cached = create_engine(
+            f"sqlite:///{path}",
+            connect_args={"check_same_thread": False},
+            poolclass=NullPool,
+        )
+        _engine_cache[path] = cached
+    return cached
+
+
+def dispose_engines() -> None:
+    """Release SQLite file handles so tests can delete temporary databases."""
+    for cached in list(_engine_cache.values()):
+        cached.dispose()
+    _engine_cache.clear()
+
+
+def _sqlalchemy_database_url() -> str:
+    return f"sqlite:///{_configured_db_path()}"
+
+
+SQLALCHEMY_DATABASE_URL = _sqlalchemy_database_url()
+engine = get_engine()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 Base = declarative_base()
 
 
@@ -54,7 +78,8 @@ def get_db():
         def example(db: Session = Depends(get_db)):
             ...
     """
-    db = SessionLocal()
+    Session = sessionmaker(autocommit=False, autoflush=False, bind=get_engine())
+    db = Session()
     try:
         yield db
     finally:

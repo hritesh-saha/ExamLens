@@ -54,9 +54,10 @@ async def upload_document(
         
         total_pages = len(image_tuples)
 
-    # Save metadata to DB
+    original_name = files[0].filename if files and files[0].filename else "document.pdf"
     doc_record = Document(
         type=doc_type,
+        file_name=original_name,
         source_pages=total_pages,
         timestamp=timestamp,
         file_path=final_pdf_path

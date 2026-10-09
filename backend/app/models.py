@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -7,9 +8,12 @@ class Document(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     type = Column(String, nullable=False)  # "lecture_board" or "question_paper"
+    file_name = Column(String, nullable=True)  # required by Member 3 sqlite schema
     source_pages = Column(Integer, nullable=False)
     timestamp = Column(String, nullable=True)
     file_path = Column(String, nullable=False)
+    year = Column(Integer, nullable=True)
+    exam_type = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class Topic(Base):
@@ -19,6 +23,7 @@ class Topic(Base):
     topic_code = Column(String, unique=True, index=True, nullable=False) 
     name = Column(String, nullable=False)
     syllabus_unit = Column(String, nullable=False)
+    note_links = relationship("NoteTopic", back_populates="topic")
 
 class Note(Base):
     __tablename__ = "Note"
@@ -31,14 +36,20 @@ class Note(Base):
     structured_content = Column(String, nullable=True) # Required for LLM output
     latex = Column(String, nullable=True)
     confidence = Column(Float, nullable=True)
+    # Topics are mapped through NoteTopic, not a topic_ids column on this table.
+    topic_links = relationship(
+        "NoteTopic", back_populates="note", cascade="all, delete-orphan"
+    )
 
-# Link table for the many-to-many relationship between Notes and Topics
+# Link table for Member 4's many-to-many Note ↔ Topic mapping.
 class NoteTopic(Base):
     __tablename__ = "NoteTopic"
 
     note_id = Column(Integer, ForeignKey("Note.id"), primary_key=True)
     topic_id = Column(Integer, ForeignKey("Topic.id"), primary_key=True)
     confidence = Column(Float, nullable=True)
+    note = relationship("Note", back_populates="topic_links")
+    topic = relationship("Topic", back_populates="note_links")
 
 class Question(Base):
     __tablename__ = "Question"

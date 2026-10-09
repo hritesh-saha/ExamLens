@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 
 class SharedPageContract(BaseModel):
@@ -26,7 +26,7 @@ class NoteCreate(BaseModel):
     document_id: int
     page: int
     lecture_date: Optional[str] = None
-    topic_ids: Optional[List[int]] = []  
+    topic_ids: List[int] = Field(default_factory=list)
     text: Optional[str] = None
     latex: Optional[str] = None
     confidence: Optional[float] = None

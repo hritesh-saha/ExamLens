@@ -1,0 +1,5 @@
+# Optional Member 4 batch tools (not required to start the API):
+#   app/services/topic_service.py
+#   app/services/repeat_service.py
+# These download a local embedding model (all-MiniLM-L6-v2) and pull torch.
+sentence-transformers>=3.0.0

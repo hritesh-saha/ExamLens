@@ -27,10 +27,23 @@ from app.database.schema import get_all_ddl
 from app.exam_parser.models import ParsedDocument, Question, Topic
 
 # Default DB location: backend/examlens.db
-DEFAULT_DB_PATH = os.environ.get(
-    "DATABASE_PATH",
-    str(Path(__file__).resolve().parent.parent.parent / "examlens.db")
-)
+_FALLBACK_DB_PATH = str(Path(__file__).resolve().parent.parent.parent / "examlens.db")
+
+
+def _configured_db_path() -> str:
+    return os.environ.get("DATABASE_PATH", _FALLBACK_DB_PATH)
+
+
+# Kept for callers that imported DEFAULT_DB_PATH; resolved at access time.
+class _DefaultDbPath:
+    def __str__(self) -> str:
+        return _configured_db_path()
+
+    def __fspath__(self) -> str:
+        return _configured_db_path()
+
+
+DEFAULT_DB_PATH = _DefaultDbPath()
 
 
 def get_connection(db_path: Optional[str] = None) -> sqlite3.Connection:
@@ -40,9 +53,9 @@ def get_connection(db_path: Optional[str] = None) -> sqlite3.Connection:
       2. Row factory set to sqlite3.Row (dict-like column access)
 
     Args:
-        db_path: Path to SQLite file, or ':memory:'. Defaults to DEFAULT_DB_PATH.
+        db_path: Path to SQLite file, or ':memory:'. Defaults to DATABASE_PATH.
     """
-    target = db_path if db_path is not None else DEFAULT_DB_PATH
+    target = db_path if db_path is not None else _configured_db_path()
     if target != ":memory:":
         parent_dir = Path(target).parent
         if parent_dir:

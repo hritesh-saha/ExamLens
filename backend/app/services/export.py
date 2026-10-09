@@ -3,7 +3,7 @@ import csv
 from typing import List, Any, Tuple
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.styles import getSampleStyleSheet
 
 def generate_markdown_export(notes: List[Any]) -> str:
     """Generates clean Markdown from Note database records."""
