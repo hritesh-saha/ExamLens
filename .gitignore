@@ -5,6 +5,7 @@
 # Python virtual environment — never commit this
 venv/
 .venv/
+.venv312/
 env/
 .env/
 
@@ -39,6 +40,7 @@ desktop.ini
 # Output folder — parsed results are generated, not tracked
 backend/output/*.json
 backend/output/*.csv
+backend/output/ocr/
 
 # Tesseract temp images and output files (written to disk during OCR)
 *.tiff
